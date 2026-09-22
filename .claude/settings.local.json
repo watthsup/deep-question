@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/annop/miniconda3/envs/deep-question/bin/python -u -m deep_question --product Cancer --yes)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(/Users/annop/miniconda3/envs/deep-question/bin/python scripts/build_sample_excel.py)",
+      "Bash(/Users/annop/miniconda3/envs/deep-question/bin/python -m deep_question --list-products)",
+      "Bash(/Users/annop/miniconda3/envs/deep-question/bin/python scripts/build_site.py)"
+    ]
+  }
+}

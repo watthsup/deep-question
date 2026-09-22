@@ -1,0 +1,8 @@
+# Minimal POC stack. Install into conda env "deep-question":
+#   conda activate deep-question && pip install -r requirements.txt
+langchain-core>=1.0
+langchain-anthropic>=1.7      # ChatAnthropic — used for BOTH Bedrock (Messages-API endpoint) and Anthropic direct
+pandas>=2.0
+openpyxl>=3.1                 # Excel read/write
+python-dotenv>=1.0
+pydantic>=2.0
