@@ -40,7 +40,12 @@ def build_user_payload(base: ProductQuestionnaire, factors: Factors) -> dict:
     }
 
 
-def build_messages(base: ProductQuestionnaire, factors: Factors, prompts_dir: Path = PROMPTS_DIR) -> list[BaseMessage]:
+def build_messages(
+    base: ProductQuestionnaire,
+    factors: Factors,
+    prompts_dir: Path = PROMPTS_DIR,
+    use_anthropic_cache: bool = True,
+) -> list[BaseMessage]:
     system_text = load_system_prompt(prompts_dir)
     payload = build_user_payload(base, factors)
     user_text = (
@@ -48,23 +53,35 @@ def build_messages(base: ProductQuestionnaire, factors: Factors, prompts_dir: Pa
         f"Produce exactly {factors.n_steps} questions.\n\n"
         f"```json\n{json.dumps(payload, ensure_ascii=False, indent=2)}\n```"
     )
+    if use_anthropic_cache:
+        sys_msg = SystemMessage(
+            content=[{"type": "text", "text": system_text, "cache_control": {"type": "ephemeral"}}]
+        )
+    else:
+        sys_msg = SystemMessage(content=system_text)
     return [
-        # explicit cache breakpoint: the ~4k-token system prompt is identical across every segment run
-        SystemMessage(content=[{"type": "text", "text": system_text, "cache_control": {"type": "ephemeral"}}]),
+        sys_msg,
         HumanMessage(content=user_text),
     ]
 
 
-_SO = {"method": "json_schema", "include_raw": True}  # include_raw -> we can inspect stop_reason / usage
-
-
 def _structured(llm: BaseChatModel):
-    """Attach the Catalog schema. Works for a plain model or a `with_fallbacks` chain."""
+    """Attach the Catalog schema. Works for ChatBedrockConverse, ChatAnthropic, and fallback chains."""
+    def _bind(model: BaseChatModel):
+        model_cls_name = model.__class__.__name__
+        if "Bedrock" in model_cls_name:
+            # Bedrock Converse API structured output uses tool/function calling
+            return model.with_structured_output(Catalog, method="function_calling", include_raw=True)
+        try:
+            return model.with_structured_output(Catalog, method="json_schema", include_raw=True)
+        except Exception:
+            return model.with_structured_output(Catalog, include_raw=True)
+
     if isinstance(llm, RunnableWithFallbacks):
-        primary = llm.runnable.with_structured_output(Catalog, **_SO)
-        fallbacks = [f.with_structured_output(Catalog, **_SO) for f in llm.fallbacks]
+        primary = _bind(llm.runnable)
+        fallbacks = [_bind(f) for f in llm.fallbacks]
         return primary.with_fallbacks(fallbacks)
-    return llm.with_structured_output(Catalog, **_SO)
+    return _bind(llm)
 
 
 class OutputTruncated(RuntimeError):
@@ -72,7 +89,9 @@ class OutputTruncated(RuntimeError):
 
 
 def generate(base: ProductQuestionnaire, factors: Factors, llm: BaseChatModel, prompts_dir: Path = PROMPTS_DIR) -> Catalog:
-    messages = build_messages(base, factors, prompts_dir)
+    primary_model = getattr(llm, "runnable", llm)
+    is_bedrock = "Bedrock" in primary_model.__class__.__name__
+    messages = build_messages(base, factors, prompts_dir, use_anthropic_cache=not is_bedrock)
     result = _structured(llm).invoke(messages)  # {"raw": AIMessage, "parsed": Catalog | None, "parsing_error": ...}
 
     raw = result["raw"]

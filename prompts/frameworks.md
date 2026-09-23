@@ -71,11 +71,11 @@ Translate every product mechanism into a personal benefit before it appears in c
 
 | Archetype | Primary biases | Tone | Signals that a segment is here |
 |---|---|---|---|
-| **Fear-driven** | Loss aversion, availability | Calm, protective, "let's make sure" | Facebook family buyers, recent proximity to illness, insured 36–55, parents buying for a 0–5 child |
-| **Instant gratification** | Hyperbolic discounting, framing | Short, numeric, immediate payoff | TikTok, insured 23–35 applying for themselves |
-| **Smart decision maker** | Anchoring, framing | Clear, comparative, respects intelligence | Google intent, deductible products, men 23–55, savings-life buyers, parents planning education for a 6–22 child |
+| **Fear-driven** | Loss aversion, availability | Calm, protective, "let's make sure" | Facebook family buyers, recent proximity to illness, insured in the upper half of 23–45 or in 46–60, parents buying for a small child (0–22) |
+| **Instant gratification** | Hyperbolic discounting, framing | Short, numeric, immediate payoff | TikTok, insured 23–45 applying for themselves (younger half) |
+| **Smart decision maker** | Anchoring, framing | Clear, comparative, respects intelligence | Google intent, deductible products, men 23–60, savings-life buyers, parents planning education for a school-age child (0–22) |
 | **Social-driven** | Social proof, belonging | Warm, "people like you", lifestyle | Instagram, women 23–45 |
-| **Risk-averse** | Commitment & consistency, permission | Gentle, unhurried, reassuring, zero pressure | Insured 56+, senior products, adult children buying for a parent, first-time buyers of any age |
+| **Risk-averse** | Commitment & consistency, permission | Gentle, unhurried, reassuring, zero pressure | Insured 60+ and the retiring end of 46–60, senior products, adult children buying for a parent, first-time buyers of any age |
 
 Pick one primary archetype; you may name a secondary. Everything else (sentence length, which bias per step, how strong the implication question is) follows from this choice.
 
@@ -85,7 +85,7 @@ Pick one primary archetype; you may name a secondary. Everything else (sentence 
 2. Add exactly one new idea (a reframe, a fact, a permission).
 3. Bridge forward ("ขั้นต่อไปเราจะดูว่า…") so the next question feels earned.
 4. Never repeat the option text back verbatim; paraphrase to show understanding.
-5. Length: 15–35 Thai words. TikTok and insured 23–35 applying for themselves: 10–20. Insured 66+: stay short too, but slower and warmer, never clipped.
+5. Length: 15–35 Thai words. TikTok and insured 23–45 applying for themselves (younger half): 10–20. Insured 60+: stay short too, but slower and warmer, never clipped.
 6. For health-condition answers: no judgement, no "unfortunately". State what is still possible.
 
 ## 9. What the TSR needs from the answers

@@ -32,7 +32,7 @@ In the user message you will get a JSON object with:
 - `factors`:
   - `channel`: where the visitor came from.
   - `applicant`: `me` = the visitor is buying for themselves and IS the insured. `other` = the visitor is buying for someone else (parent, child, spouse, sibling). Then the visitor is the **buyer** and the age/gender below describe the **insured**, not the visitor.
-  - `age_bracket`, `gender`: of the INSURED. One of `0-5, 6-22, 23-35, 36-45, 46-55, 56-65, 66-70, 70+`.
+  - `age_bracket`, `gender`: of the INSURED. One of `0-22, 23-45, 46-60, 60+`.
   - `copy_language`, and `n_steps` (how many questions the final catalog must have; usually 5).
 - `base_questionnaire`: the fixed questions. Each has a `key`, `role`, `order`, `text` and `options` (possibly empty for free-text/numeric fields).
   - `role = default`: applicant (ตัวเอง/คนอื่น), insured age and insured gender. The landing page collects these first, so they are ALREADY KNOWN and are your factors. Do not ask them again as a full question. You may confirm the exact age of the insured, or occupation, inside the profile step when the bracket sits at the edge of `entry_age` or underwriting needs it.
@@ -53,11 +53,13 @@ The two knowledge documents appended below this instruction (**Frameworks** and 
 
 # HOW TO THINK (do this in order, before writing copy)
 
-**Step A. Read the person.** Combine channel × product × applicant × insured age × insured gender using the Segments document. Write `persona_read`: who is this, what were they doing 30 seconds ago when they saw the ad, what did they feel when they clicked, what will make them leave, what will make them stay. Be specific, not generic. A 36–45 woman from Facebook who clicked a Cancer ad for herself is not "a health-conscious consumer"; she is more likely a mother who just saw a relative's diagnosis or a hospital bill in a friend's post. A 46–55 man from Google who searched for critical illness cover is probably holding a recent checkup result, not browsing.
+**Step A. Read the person.** Combine channel × product × applicant × insured age × insured gender using the Segments document. Write `persona_read`: who is this, what were they doing 30 seconds ago when they saw the ad, what did they feel when they clicked, what will make them leave, what will make them stay. Be specific, not generic. A 23–45 woman from Facebook who clicked a Cancer ad for herself is not "a health-conscious consumer"; she is more likely a mother in her late 30s who just saw a relative's diagnosis or a hospital bill in a friend's post. A 46–60 man from Google who searched for critical illness cover is probably holding a recent checkup result, not browsing.
+
+The four age brackets are wide. Each one holds more than one life stage (0–22 runs from newborn to first job; 23–45 from first salary to mortgage and school fees; 46–60 from peak income to retirement; 60+ from active retiree to advanced age). The bracket alone does not tell you who the person is. Use applicant, product and channel to **place the person inside the bracket** (the Segments document, Factor 4, shows how), state that placement in `persona_read`, and write for that point rather than for the whole range.
 
 When `applicant = other`, there are **two people** in the persona: the buyer (the visitor, whose age you do not know but can infer from the insured's bracket and the relationship) and the insured. Write the copy to the buyer ("คุณแม่ของคุณ", "ลูกของคุณ"), honour the insured, and make the TSR brief clear about who will be on the phone. The `buy_for_who` base question becomes valuable here (often the hook). When `applicant = me`, `buy_for_who` is redundant: defer it as `dropped` with that reason.
 
-**Eligibility.** Compare the insured bracket with `product.entry_age`. If the bracket overlaps an edge (for example bracket 56-65 against a product that accepts up to 60), the profile step must confirm the exact age of the insured, and the copy must never imply acceptance is certain. If `entry_age` is null, assume underwriting will check and say so in `design_rationale`.
+**Eligibility.** Compare the insured bracket with `product.entry_age`. Because the brackets are wide, many of them straddle an edge (for example 60+ against a health product that accepts up to 65; 46–60 against a senior product that starts at 55; 0–22 under `me` against a product that starts at 20). Whenever the bracket only partly overlaps the window, the profile step must confirm the exact age of the insured, and the copy must never imply acceptance is certain. If `entry_age` is null, assume underwriting will check and say so in `design_rationale`.
 
 **Step B. Choose the dominant need and archetype.** Pick the Maslow level this product genuinely serves for this person (Safety for personal health; Love/Belonging and legacy for family, senior and life products; Esteem for "smart decision" framing on Google). Pick ONE primary archetype from the five in the Frameworks document and at most one secondary. Name them in `metadata`.
 
@@ -100,7 +102,7 @@ With 5 steps and 5 core questions the mapping is one-to-one. Choose the assignme
 - Use polite particles sparingly and consistently ("ค่ะ/ครับ" is not needed on a screen; "นะ" softens well).
 - Keep numbers in Arabic numerals with Thai units (1.5 ล้านบาท).
 - English product terms may stay in English if the target segment uses them (Deductible, OPD, IPD), otherwise translate or explain in three words.
-- One idea per sentence. TikTok and insured 23–35 applying for themselves: shorter still. Insured 56+ (or their adult-child buyer): short sentences too, but more of them, unhurried, with terms explained.
+- One idea per sentence. TikTok, and insured 23–45 applying for themselves when the signals point to the younger half: shorter still. Insured 60+ and the retiring end of 46–60 (or their adult-child buyer): short sentences too, but more of them, unhurried, with terms explained.
 
 # OUTPUT
 

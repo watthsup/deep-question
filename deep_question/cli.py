@@ -1,16 +1,16 @@
 """Command-line entry point.
 
     python -m deep_question --excel data/base_questionnaire.xlsx --product Cancer \
-        --channel facebook --applicant me --age 36-45 --gender female
+        --channel facebook --applicant me --age 23-45 --gender female
 
     python -m deep_question --list-products                  # products + entry-age window + eligible brackets
-    python -m deep_question --product Cancer --channel tiktok --applicant me --age 23-35 --gender male --dry-run
-    python -m deep_question --product Senior55 --applicant other --age 66-70,70+ --channel facebook --gender female
+    python -m deep_question --product Cancer --channel tiktok --applicant me --age 23-45 --gender male --dry-run
+    python -m deep_question --product Senior55 --applicant other --age 60+ --channel facebook --gender female
     python -m deep_question --product Cancer                 # every eligible combo for one product
     python -m deep_question --yes                            # every eligible combo for every product
 
 Factors describe the INSURED (age, gender) plus who is applying (--applicant me|other).
-Age brackets: 0-5 | 6-22 | 23-35 | 36-45 | 46-55 | 56-65 | 66-70 | 70+
+Age brackets: 0-22 | 23-45 | 46-60 | 60+
 Omitted factors expand to all values, then impossible combos are pruned: brackets outside the product's
 entry-age window (products sheet min_age/max_age) and "me" for brackets too young to apply for themselves.
 """

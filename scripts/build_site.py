@@ -219,6 +219,17 @@ const CATALOGS = JSON.parse(document.getElementById('catalog-data').textContent)
 
 const DIMS = ['product', 'channel', 'applicant', 'age_bracket', 'gender'];
 const AGE_ORDER = ['0-5','6-22','23-35','36-45','46-55','56-65','66-70','70+'];
+// Map 8 UI button ranges to our 4 consolidated catalog groups (56-65 rounded to 46-60)
+const AGE_MAP = {
+  '0-5': '0-22',
+  '6-22': '0-22',
+  '23-35': '23-45',
+  '36-45': '23-45',
+  '46-55': '46-60',
+  '56-65': '46-60',
+  '66-70': '60+',
+  '70+': '60+',
+};
 const FIXED_ORDER = {
   channel: ['facebook','tiktok','instagram','google'],
   applicant: ['me','other'],
@@ -229,8 +240,11 @@ const LABEL = {
   channel: {facebook:'Facebook', tiktok:'TikTok', instagram:'Instagram', google:'Google'},
   applicant: {me:'ซื้อให้ตัวเอง', other:'ซื้อให้คนอื่น'},
   gender: {male:'ชาย', female:'หญิง'},
-  age_bracket: {'0-5':'0–5 ปี','6-22':'6–22 ปี','23-35':'23–35 ปี','36-45':'36–45 ปี','46-55':'46–55 ปี',
-                '56-65':'56–65 ปี','66-70':'66–70 ปี','70+':'70+ ปี'},
+  age_bracket: {
+    '0-5':'0–5 ปี','6-22':'6–22 ปี','23-35':'23–35 ปี','36-45':'36–45 ปี',
+    '46-55':'46–55 ปี','56-65':'56–65 ปี','66-70':'66–70 ปี','70+':'70+ ปี',
+    '0-22':'0–22 ปี','23-45':'23–45 ปี','46-60':'46–60 ปี','60+':'60+ ปี',
+  },
 };
 const DIM_TITLE = {
   product: 'ผลิตภัณฑ์', channel: 'ช่องทาง', applicant: 'ซื้อให้ใคร',
@@ -240,6 +254,10 @@ const DIM_TITLE = {
 const state = { sel: {}, catalog: null, qIndex: 0, answers: [], selectedOptionId: null, designer: false };
 
 function dimValues(dim) {
+  if (dim === 'age_bracket') {
+    const presentTargets = new Set(CATALOGS.map(c => c.metadata.age_bracket));
+    return FIXED_ORDER.age_bracket.filter(v => presentTargets.has(AGE_MAP[v] || v));
+  }
   const present = new Set(CATALOGS.map(c => c.metadata[dim]));
   const order = FIXED_ORDER[dim];
   if (order) return order.filter(v => present.has(v));
@@ -247,7 +265,14 @@ function dimValues(dim) {
 }
 
 function matches(sel) {
-  return CATALOGS.filter(c => DIMS.every(d => !sel[d] || c.metadata[d] === sel[d]));
+  return CATALOGS.filter(c => DIMS.every(d => {
+    if (!sel[d]) return true;
+    if (d === 'age_bracket') {
+      const target = AGE_MAP[sel[d]] || sel[d];
+      return c.metadata.age_bracket === target;
+    }
+    return c.metadata[d] === sel[d];
+  }));
 }
 
 function pillLabel(dim, value) {
@@ -293,7 +318,7 @@ function renderSelector() {
         <div>พร้อมแล้ว — ชุดคำถามสำหรับ <b>${found[0].metadata.product}</b>
         (${pillLabel('channel', found[0].metadata.channel)} ·
         ${pillLabel('applicant', found[0].metadata.applicant)} ·
-        ${pillLabel('age_bracket', found[0].metadata.age_bracket)} ·
+        ${pillLabel('age_bracket', state.sel.age_bracket)} ·
         ${pillLabel('gender', found[0].metadata.gender)})</div></div>`;
   } else if (allPicked && found.length === 0) {
     banner = `<div class="match-banner show"><span class="icon">🚧</span>

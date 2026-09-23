@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 QuestionRole = Literal["default", "core", "uw", "spare"]
 Channel = Literal["facebook", "tiktok", "instagram", "google"]
 # Age of the INSURED (the person the policy is for), not necessarily the visitor.
-AgeBracket = Literal["0-5", "6-22", "23-35", "36-45", "46-55", "56-65", "66-70", "70+"]
+AgeBracket = Literal["0-22", "23-45", "46-60", "60+"]
 Gender = Literal["male", "female"]
 # Who the visitor is applying for. "other" = buying for a parent, child, spouse, sibling...
 Applicant = Literal["me", "other"]
@@ -27,7 +27,7 @@ SELF_APPLY_MIN_AGE = 20  # youngest insured age that can realistically apply for
 
 
 def bracket_bounds(bracket: str) -> tuple[int, int]:
-    """'6-22' -> (6, 22); '70+' -> (70, 200)."""
+    """'0-22' -> (0, 22); '60+' -> (60, 200)."""
     if bracket.endswith("+"):
         return int(bracket[:-1]), 200
     lo, hi = bracket.split("-")
@@ -62,7 +62,7 @@ class ProductQuestionnaire(BaseModel):
             lo, hi = bracket_bounds(b)
             if hi < lo_p or lo > hi_p:
                 continue
-            if applicant == "me" and hi < self_apply_min_age:
+            if applicant == "me" and min(hi, hi_p) < self_apply_min_age:
                 continue
             out.append(b)
         return out
@@ -152,8 +152,8 @@ class Catalog(BaseModel):
     catalog_id: str = Field(
         description=(
             "UPPER_SNAKE: PRODUCT_CHANNEL_APPLICANT_AGE_GENDER_V1. Channel codes: FB, TT, IG, GG. "
-            "Applicant: ME, OTH. Age codes: 0005, 0622, 2335, 3645, 4655, 5665, 6670, 70P. Gender: M, F. "
-            "e.g. CANCER_FB_ME_3645_F_V1, SENIOR55_FB_OTH_6670_F_V1"
+            "Applicant: ME, OTH. Age codes: 0022, 2345, 4660, 60P. Gender: M, F. "
+            "e.g. CANCER_FB_ME_2345_F_V1, SENIOR55_FB_OTH_60P_F_V1"
         )
     )
     metadata: CatalogMetadata
