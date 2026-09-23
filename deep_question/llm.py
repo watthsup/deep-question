@@ -76,7 +76,7 @@ def bedrock_llm(s: LLMSettings) -> BaseChatModel:
         max_tokens=s.max_tokens,
         timeout=s.timeout_s,
         max_retries=2,
-        streaming=True,
+        supports_tool_choice_values=("auto",),
     )
 
 

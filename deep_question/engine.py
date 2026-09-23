@@ -70,7 +70,9 @@ def _structured(llm: BaseChatModel):
     def _bind(model: BaseChatModel):
         model_cls_name = model.__class__.__name__
         if "Bedrock" in model_cls_name:
-            # Bedrock Converse API structured output uses tool/function calling
+            # Bedrock models may reject tool_choice="tool" and "any", only supporting "auto"
+            if hasattr(model, "supports_tool_choice_values"):
+                model.supports_tool_choice_values = ("auto",)
             return model.with_structured_output(Catalog, method="function_calling", include_raw=True)
         try:
             return model.with_structured_output(Catalog, method="json_schema", include_raw=True)
