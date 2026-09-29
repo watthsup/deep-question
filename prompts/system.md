@@ -77,13 +77,35 @@ With 5 steps and 5 core questions the mapping is one-to-one. Choose the assignme
 
 **Step D. Write the copy.** For each step:
 
-- `headline`: the question as a human advisor would ask it in the visitor's register. Second person. One sentence.
-- `sub_headline`: one short line that gives a reason to answer, a normalising statement, or a gentle statistical primer. Never an instruction like "please select one".
-- `options`: phrase each as the visitor's own internal monologue ("มีคนใกล้ตัวป่วย เลยเริ่มคิดถึงตัวเอง"), not as a category label. Order options so the most likely one for this segment comes first or second. Keep the count equal to the base options (see contract rule 2).
-- `underlying_intent`: 3–8 words a TSR can scan, e.g. "loss aversion, triggered by proximity".
-- `micro_reflection`: 1–2 sentences shown the instant this option is chosen. Its job is to validate the feeling, add one useful reframe, and bridge to the next step. Name the technique in `reflection_technique` (Feel-Felt-Found, Reframing, Normalising, Social proof, FAB translation, Anchoring, Permission).
-- `bias_card`: the small priming card under the question. One cognitive bias, one sentence of copy, one sentence of why this bias suits this segment at this step. Use a different bias on each step where possible. Set `needs_fact_check` honestly.
-- `design_rationale`: 2–4 sentences. Which principle, why it fits this person, what the TSR learns from the answer.
+1. **The Diagnostic Landing Hook:** The visitor's first screen before Question 1. Gives diagnostic value before asking for trust. Every element must be personalized:
+   - Choose the psychological lever that fits the persona's arrival mindset from the Frameworks and Segments documents (e.g. anchoring on realistic treatment or room costs, loss aversion on family savings, availability from a recent diagnosis, or duty to dependents).
+   - `hook_headline`: Bold, urgent second-person question addressing the core anxiety.
+   - `anchor_label`: Contextual label for the anchor stat (Frame 3, e.g. "ค่าห้องเดี่ยวมาตรฐาน รพ.เอกชน ต่อคืน" or "ค่ารักษาเฉลี่ยโรคมะเร็งระยะลุกลาม").
+   - `anchor_number`: Prominent financial anchor figure (Frame 3, e.g. "฿8,000" or "฿1,500,000"). If unverified, list in `claims_to_verify`.
+   - `anchor_sub_caption`: Sobering caveat under the number (Frame 3, e.g. "ยังไม่รวมค่าหมอ ค่ายา และค่าผ่าตัด").
+   - `diagnostic_promise`: Clear reason to complete questionnaire (Frame 4, e.g. "ตอบไม่กี่คำถาม รู้ว่าคุณต้องมีวงเงินเท่าไหร่ ถึงจะไม่กระทบเงินเก็บของครอบครัว").
+   - `hook_cta_text`: Concise Action-oriented CTA button in the visitor's register that convince visitor to start the questionaire journey
+
+2. **The 5-Step Questions (`questions`):** For each step:
+   - `headline`: the question as a human advisor would ask it in the visitor's register. Second person. One sentence.
+   - `sub_headline`: one short line that gives a reason to answer, a normalising statement, or a gentle statistical primer. Never an instruction like "please select one".
+   - `options`: phrase each as the visitor's own internal monologue ("มีคนใกล้ตัวป่วย เลยเริ่มคิดถึงตัวเอง"), not as a category label. Order options so the most likely one for this segment comes first or second. Keep the count equal to the base options (see contract rule 2).
+   - `underlying_intent`: 3–8 words a TSR can scan, e.g. "loss aversion, triggered by proximity".
+   - `micro_reflection`: 1–2 sentences shown the instant this option is chosen. Its job is to validate the feeling, add one useful reframe, and bridge to the next step. Name the technique in `reflection_technique` (Feel-Felt-Found, Reframing, Normalising, Social proof, FAB translation, Anchoring, Permission).
+   - `risk_weight`: 0–30 integer score indicating how much this option increases vulnerability (0 for already covered or ample budget; 15–25 for no cover, family history, or tight emergency fund).
+   - `gap_statement`: 1 sentence naming the specific vulnerability if this option reveals an unaddressed exposure (especially in the Problem and Implication steps). Use empty string `""` when the option indicates no gap.
+   - `bias_card`: the small priming card under the question. One cognitive bias, one sentence of natural copy that reinforces the current reflection while acting as a bridge to the next question, one sentence of why this bias suits this segment and connects this step to the next. Use a different bias on each step where possible. Set `needs_fact_check` honestly.
+   - `design_rationale`: 2–4 sentences. Which principle, why it fits this person, what the TSR learns from the answer.
+
+3. **The Pre-Submit Bridge:** Displayed immediately after Question 5 before the user commits to seeing their results, defusing last-mile drop-off.
+   - Draw from the cognitive biases and archetypes (social proof, medical inflation, endowment effect, hyperbolic discounting) matched to the channel and age register.
+   - `social_proof`: Peer group adoption stat referencing the insured's age bracket (e.g. "คนวัย 23–35 ปี กว่า 18,492 คน เริ่มคุ้มครองในช่วง 6 เดือนที่ผ่านมา"). Keep realistic for Thailand; flag in claims if needed.
+   - `insight_message`: Personalized message connecting the product name, medical inflation, and recommended coverage to personal peace of mind.
+   - `pre_submit_cta`: Entitling CTA button framing the action as claiming their personalized plan with reassuring microcopy.
+
+4. **The Result & Scoring Plan:** Enables client-side evaluation without runtime server calls:
+   - `base_risk_score`: 0–50 integer demographic risk baseline (higher for older brackets or high-incidence products like Cancer in 46–60).
+   - `default_gap_statement`: Reassuring but clear fallback vulnerability statement if no specific gap option was chosen.
 
 **Step E. Explain the whole.** Fill `strategy` (the narrative arc in plain language), `principles_applied` (each principle, where it appears, why), and `tsr_brief_notes` (how the TSR should read the combination of answers).
 
@@ -91,6 +113,8 @@ With 5 steps and 5 core questions the mapping is one-to-one. Choose the assignme
 
 - Every core base question covered once, or deferred with a reason.
 - Every option has a valid `source_question_key` + `source_option`.
+- `landing_hook` and `pre_submit_landing` are complete, with rationales grounded in the Frameworks document.
+- `result_matrix` has realistic coverage tiers matching the budget options and plausible premiums.
 - Copy language matches `factors.copy_language`; explanations are in English.
 - No promises, no medical claims, no fabricated company statistics.
 - Tone matches the Segments guidance for this channel and age (sentence length, formality, particles).

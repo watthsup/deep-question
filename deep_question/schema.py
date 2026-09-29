@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Literal, get_args
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
 # --------------------------------------------------------------------------- INPUT
 
@@ -96,12 +96,24 @@ class Option(BaseModel):
     reflection_technique: str = Field(
         description="Named technique: Feel-Felt-Found | Reframing | Normalising | Social proof | FAB translation | Anchoring | Permission"
     )
+    risk_weight: int = Field(
+        default=0,
+        ge=0,
+        le=30,
+        description="Risk score points (0-30) contributed if this option is chosen. Higher = greater exposure/vulnerability.",
+    )
+    gap_statement: str = Field(
+        default="",
+        description="Specific 1-sentence customer vulnerability statement if this option reveals an unaddressed risk or gap.",
+    )
 
 
 class BiasCard(BaseModel):
-    bias: str = Field(description="Cognitive bias name, e.g. Loss aversion.")
-    text: str = Field(description="One-sentence customer-facing priming text shown under the question.")
-    why_this_bias: str = Field(description="English: why this bias fits this segment at this step.")
+    bias: str = Field(description="Cognitive bias name, e.g. Loss aversion. Strictly internal for TSR/Reviewer.")
+    text: str = Field(
+        description="1-2 sentences in natural Thai. Empathetic priming quote and narrative bridge toward the next question. NEVER prefix with bias name or category."
+    )
+    why_this_bias: str = Field(description="English: why this bias fits this segment and how it bridges step N to N+1.")
     needs_fact_check: bool = Field(description="True if the copy contains any number or claim not given in the input.")
 
 
@@ -114,7 +126,7 @@ class Question(BaseModel):
     sub_headline: str = Field(description="One short line giving a reason to answer or a normalising primer.")
     input_type: InputType
     options: list[Option]
-    bias_card: BiasCard | None = None
+    bias_card: BiasCard
     design_rationale: str = Field(
         description="English, 2-4 sentences: principle used, why it fits this person, what the TSR learns."
     )
@@ -159,6 +171,24 @@ class Catalog(BaseModel):
     metadata: CatalogMetadata
     persona_read: str = Field(description="English. Who this person is at the moment of the click; specific, not generic.")
     strategy: str = Field(description="English. The conversation arc in plain language, step by step.")
+
+    # Screen 1: Diagnostic Hook (Frames 2, 3, 4, 5 - ALL DYNAMIC)
+    hook_headline: str = Field(description="Frame 2: Bold emotional hook question tailored to segment")
+    anchor_label: str = Field(description="Frame 3: Contextual stat label e.g. ค่าห้องเดี่ยวมาตรฐาน รพ.เอกชน ต่อคืน หรือ ค่ารักษาเฉลี่ยโรคมะเร็ง")
+    anchor_number: str = Field(description="Frame 3: Prominent stat or cost figure e.g. ฿8,000 หรือ ฿1,500,000")
+    anchor_sub_caption: str = Field(description="Frame 3: Sobering caveat e.g. ยังไม่รวมค่าหมอ ค่ายา และค่าผ่าตัด")
+    diagnostic_promise: str = Field(description="Frame 4: Clear reason to complete questionnaire e.g. ตอบไม่กี่คำถาม รู้ว่าคุณต้องมีวงเงินเท่าไหร่...")
+    hook_cta_text: str = Field(description="Frame 5: Action-oriented CTA button tailored to segment e.g. ประเมินให้ครอบครัว → หรือ เช็กความพร้อมส่วนตัวของฉัน →")
+
+    # Screen 2: Pre-Submit Landing Bridge
+    social_proof: str = Field(description="Screen 2: Peer group adoption stat tailored to demographic.")
+    insight_message: str = Field(description="Screen 2: Personalized framing message connecting medical inflation, product, and peace of mind.")
+    pre_submit_cta: str = Field(description="Screen 2: Reassuring action CTA button text with microcopy.")
+
+    # Screen 3: Result Evaluation Matrix
+    base_risk_score: int = Field(default=15, ge=0, le=50, description="Baseline risk score (0-50) derived from age/gender/product.")
+    default_gap_statement: str = Field(description="Screen 3: Fallback 1-sentence vulnerability gap statement.")
+
     questions: list[Question]
     deferred_questions: list[DeferredQuestion] = Field(default_factory=list)
     principles_applied: list[PrincipleNote]
@@ -167,3 +197,36 @@ class Catalog(BaseModel):
         default_factory=list,
         description="Every number or factual claim in the copy that the business must verify before shipping.",
     )
+
+    @computed_field
+    def landing_hook(self) -> dict:
+        return {
+            "headline": self.hook_headline,
+            "anchor_card": {
+                "label": self.anchor_label,
+                "highlight_number": self.anchor_number,
+                "sub_caption": self.anchor_sub_caption,
+            },
+            "diagnostic_promise": self.diagnostic_promise,
+            "cta_text": self.hook_cta_text,
+        }
+
+    @computed_field
+    def pre_submit_landing(self) -> dict:
+        return {
+            "social_proof": self.social_proof,
+            "insight_card": {
+                "title": "ข้อความถึงคุณโดยเฉพาะ",
+                "message": self.insight_message,
+            },
+            "cta_label": self.pre_submit_cta,
+            "cta_subtext": "ไม่มีข้อผูกมัด ผู้เชี่ยวชาญโทรอธิบายภายใน 24 ชม.",
+        }
+
+    @computed_field
+    def result_matrix(self) -> dict:
+        return {
+            "base_risk_score": self.base_risk_score,
+            "default_gap_statement": self.default_gap_statement,
+        }
+

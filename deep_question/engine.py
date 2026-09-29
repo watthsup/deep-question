@@ -74,10 +74,7 @@ def _structured(llm: BaseChatModel):
             if hasattr(model, "supports_tool_choice_values"):
                 model.supports_tool_choice_values = ("auto",)
             return model.with_structured_output(Catalog, method="function_calling", include_raw=True)
-        try:
-            return model.with_structured_output(Catalog, method="json_schema", include_raw=True)
-        except Exception:
-            return model.with_structured_output(Catalog, include_raw=True)
+        return model.with_structured_output(Catalog, method="json_schema", include_raw=True)
 
     if isinstance(llm, RunnableWithFallbacks):
         primary = _bind(llm.runnable)
