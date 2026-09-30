@@ -1227,6 +1227,8 @@ const state = {
   selectedOptionId: null,
   evalResult: null,
   designer: false,
+  quoteMilestones: new Set(),
+  shownQuotes: new Set(),
 };
 
 function dimValues(dim) {
@@ -1383,6 +1385,8 @@ function startJourney() {
   state.answers = [];
   state.selectedOptionId = null;
   state.evalResult = null;
+  state.quoteMilestones = generateQuoteMilestones(state.catalog.questions.length);
+  state.shownQuotes = new Set();
 
   renderLandingHook();
 }
@@ -1459,6 +1463,10 @@ function renderLandingHook() {
 
 function startQuestions() {
   state.qIndex = 0;
+  state.answers = [];
+  state.selectedOptionId = null;
+  state.quoteMilestones = generateQuoteMilestones(state.catalog.questions.length);
+  state.shownQuotes = new Set();
   renderQuestion();
 }
 
@@ -1497,16 +1505,50 @@ function getOptionEmoji(label, idx) {
   return FALLBACK_EMOJIS[idx % FALLBACK_EMOJIS.length];
 }
 
+/**
+ * Dynamic Quote Milestones Generator
+ * Randomly picks 1 or 2 question milestones (e.g. after Q1, Q2, Q3, or Q4)
+ * to dynamically insert the Coursiv-style interstitial quote screen.
+ */
+function generateQuoteMilestones(totalQuestions) {
+  if (!totalQuestions || totalQuestions <= 2) return new Set();
+  const candidateIndices = [];
+  for (let i = 0; i < totalQuestions - 1; i++) {
+    candidateIndices.push(i);
+  }
+
+  // Shuffle candidateIndices using Fisher-Yates
+  for (let i = candidateIndices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [candidateIndices[i], candidateIndices[j]] = [candidateIndices[j], candidateIndices[i]];
+  }
+
+  // Pick 1 to 2 milestones randomly (e.g. 70% chance of 2 quotes, 30% chance of 1 quote)
+  const count = (Math.random() < 0.7 && candidateIndices.length >= 2) ? 2 : 1;
+  const chosen = candidateIndices.slice(0, count).sort((a, b) => a - b);
+  return new Set(chosen);
+}
+
 const INTERSTITIAL_QUOTES = {
   0: {
     title: 'เพราะเรื่องใกล้ตัว... สะกิดให้เราเริ่มวางแผน',
     badge: 'ข้อคิดชวนคิด',
     nextLabel: 'ไปต่อที่คำถามที่ 2 ➔',
   },
+  1: {
+    title: 'สิ่งที่คุณกังวลที่สุด... คือสิ่งที่เราให้ความสำคัญ',
+    badge: 'ข้อคิดชวนคิด',
+    nextLabel: 'ไปต่อที่คำถามที่ 3 ➔',
+  },
   2: {
     title: 'ค่าห้องและวงเงิน... คือตัวชี้วัดความอุ่นใจที่แท้จริง',
     badge: 'ข้อคิดชวนคิด',
     nextLabel: 'ไปต่อที่คำถามที่ 4 ➔',
+  },
+  3: {
+    title: 'สุขภาพในวันนี้... คือโอกาสที่ดีที่สุดในการเตรียมพร้อม',
+    badge: 'ข้อคิดชวนคิด',
+    nextLabel: 'ไปต่อที่คำถามที่ 5 ➔',
   }
 };
 
@@ -1614,6 +1656,9 @@ function prevQuestion() {
   if (state.qIndex > 0) {
     state.qIndex -= 1;
     state.answers.pop();
+    if (state.shownQuotes) {
+      state.shownQuotes.delete(state.qIndex);
+    }
     state.selectedOptionId = state.answers[state.qIndex] || null;
     renderQuestion();
   }
@@ -1626,13 +1671,10 @@ function nextQuestion() {
   state.answers.push(chosen.option_id);
   state.selectedOptionId = null;
 
-  // Interstitial Quote Bridge check (Coursiv style: interleave quotes at strategic milestones)
-  if (state.qIndex === 0) {
-    renderInterstitialQuote(0);
-    return;
-  }
-  if (state.qIndex === 2) {
-    renderInterstitialQuote(2);
+  // Interstitial Quote Bridge check (Dynamic Random Milestone Insertion)
+  if (state.quoteMilestones && state.quoteMilestones.has(state.qIndex) && !state.shownQuotes.has(state.qIndex)) {
+    state.shownQuotes.add(state.qIndex);
+    renderInterstitialQuote(state.qIndex);
     return;
   }
 
@@ -1714,6 +1756,9 @@ function continueFromQuote(afterQIndex) {
 function backToQuestion(afterQIndex) {
   state.qIndex = afterQIndex;
   const prevAnswer = state.answers.pop();
+  if (state.shownQuotes) {
+    state.shownQuotes.delete(afterQIndex);
+  }
   state.selectedOptionId = prevAnswer || null;
   renderQuestion();
 }

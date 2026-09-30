@@ -226,29 +226,23 @@
       premium_disclaimer: matchedTier.premium_disclaimer || 'ประมาณการ ยังไม่ใช่เบี้ยจริง'
     };
 
-    // 5. Vulnerability Gap Extraction
+    // 5. Vulnerability Gap Extraction (Dynamic Random Selection among answered options with gap_statement)
     let vulnerabilityGap = null;
 
-    // Search priority: gap step first, then pain step, then any step with gap_statement
-    const priorityPhases = ['gap', 'pain', 'hook', 'profile', 'emotion'];
-    for (const phase of priorityPhases) {
-      const match = resolved.find(item => item.question.step_phase === phase && item.option.gap_statement);
-      if (match) {
-        vulnerabilityGap = match.option.gap_statement;
-        break;
-      }
-    }
+    // Collect all unique non-empty gap statements from user-selected options
+    const candidateGaps = resolved
+      .map(item => item.option.gap_statement)
+      .filter(stmt => typeof stmt === 'string' && stmt.trim().length > 0);
+    const uniqueGaps = Array.from(new Set(candidateGaps));
 
-    if (!vulnerabilityGap) {
-      // Any match with gap_statement
-      const anyMatch = resolved.find(item => item.option.gap_statement);
-      if (anyMatch) {
-        vulnerabilityGap = anyMatch.option.gap_statement;
-      } else {
-        vulnerabilityGap = catalog.default_gap_statement || 
-          matrix.default_gap_statement || 
-          'มีช่องว่างระหว่างวงเงินที่มีกับค่ารักษาจริง โดยเฉพาะกรณีโรคร้ายแรงที่ต้องรักษาต่อเนื่อง';
-      }
+    if (uniqueGaps.length > 0) {
+      // Pick one randomly for dynamic variation
+      const randomIndex = Math.floor(Math.random() * uniqueGaps.length);
+      vulnerabilityGap = uniqueGaps[randomIndex];
+    } else {
+      vulnerabilityGap = catalog.default_gap_statement || 
+        matrix.default_gap_statement || 
+        'มีช่องว่างระหว่างวงเงินที่มีกับค่ารักษาจริง โดยเฉพาะกรณีโรคร้ายแรงที่ต้องรักษาต่อเนื่อง';
     }
 
     return {
