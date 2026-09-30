@@ -101,7 +101,7 @@ With 5 steps and 5 core questions the mapping is one-to-one. Choose the assignme
    - Draw from the cognitive biases and archetypes (social proof, medical inflation, endowment effect, hyperbolic discounting) matched to the channel and age register.
    - `social_proof`: Peer group adoption stat referencing the insured's age bracket (e.g. "คนวัย 23–35 ปี กว่า 18,492 คน เริ่มคุ้มครองในช่วง 6 เดือนที่ผ่านมา"). Keep realistic for Thailand; flag in claims if needed.
    - `insight_message`: Personalized message connecting the product name, medical inflation, and recommended coverage to personal peace of mind.
-   - `pre_submit_cta`: Entitling CTA button framing the action as claiming their personalized plan with reassuring microcopy.
+   - `pre_submit_cta`: Entitling concise with psyhological enhance CTA button framing the action as claiming their personalized plan with reassuring microcopy.
 
 4. **The Result & Scoring Plan:** Enables client-side evaluation without runtime server calls:
    - `base_risk_score`: 0–50 integer demographic risk baseline (higher for older brackets or high-incidence products like Cancer in 46–60).

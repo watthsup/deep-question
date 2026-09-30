@@ -178,7 +178,7 @@ class Catalog(BaseModel):
     anchor_number: str = Field(description="Frame 3: Prominent stat or cost figure e.g. ฿8,000 หรือ ฿1,500,000")
     anchor_sub_caption: str = Field(description="Frame 3: Sobering caveat e.g. ยังไม่รวมค่าหมอ ค่ายา และค่าผ่าตัด")
     diagnostic_promise: str = Field(description="Frame 4: Clear reason to complete questionnaire e.g. ตอบไม่กี่คำถาม รู้ว่าคุณต้องมีวงเงินเท่าไหร่...")
-    hook_cta_text: str = Field(description="Frame 5: Action-oriented CTA button tailored to segment e.g. ประเมินให้ครอบครัว → หรือ เช็กความพร้อมส่วนตัวของฉัน →")
+    hook_cta_text: str = Field(description="Frame 5: Action-oriented CTA button tailored to segment")
 
     # Screen 2: Pre-Submit Landing Bridge
     social_proof: str = Field(description="Screen 2: Peer group adoption stat tailored to demographic.")
