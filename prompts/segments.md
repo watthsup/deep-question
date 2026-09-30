@@ -43,7 +43,7 @@ The landing page asks this first, so you always know it.
 | Applicant | Who you are talking to | What changes |
 |---|---|---|
 | **me** | The visitor is the insured. Age and gender describe them. | Second person throughout ("คุณ"). Health-condition and occupation questions are about themselves; keep them non-judgemental. `buy_for_who` is redundant: defer as `dropped`. Under `me`, a 0–22 insured can only be a 20–22-year-old; a 60+ insured is most likely 60–65, still independent and comfortable online. |
-| **other** | The visitor is a **buyer**; the insured is someone else. Age and gender describe the insured. Infer the buyer from the relationship: an insured aged 0–22 means the buyer is almost always a parent (roughly 25–45 for a small child, 35–55 for a student); an insured aged 60+ usually means an adult child (roughly 30–55) or a spouse of similar age; an insured aged 46–60 under `other` is usually a spouse, or a young adult child buying for a parent in their late 50s; an insured aged 23–45 under `other` is usually a spouse or partner, sometimes a parent buying for a grown child. | Write to the buyer about the insured ("คุณแม่", "ลูกของคุณ", "คนที่คุณดูแล"). Maslow level shifts toward Love & Belonging even for health products. The `buy_for_who` base question is now high-value (often the hook: it tells the TSR the relationship). Health and occupation questions are about the insured; the buyer may not know the answers precisely, so offer an honest "ไม่แน่ใจ" path only if the base options allow it, otherwise phrase gently. The TSR will speak to the buyer; say so in `tsr_brief_notes`. |
+| **other** | The visitor is a **buyer**; the insured is someone else. Age and gender describe the insured. Do NOT assume a specific relationship upfront (e.g. 46–60 female could be a spouse, sibling, parent, or relative). | Write to the buyer using general, respectful caring terms. Maslow level shifts toward Love & Belonging. The `buy_for_who` base question MUST be asked early (often Q1 or Q2) so the visitor explicitly tells you the relationship (พ่อ, แม่, คู่สมรส, ลูก, พี่น้อง, ญาติ). Health and occupation questions are about the insured; the buyer may not know the answers precisely, so offer gentle phrasing. The TSR will speak to the buyer; specify the answered relationship in `tsr_brief_notes`. |
 
 ## Factor 4 · Insured age bracket
 
@@ -60,7 +60,7 @@ Four brackets. Each one is wide and holds more than one life stage, so the brack
 
 ## Factor 5 · Insured gender
 
-Use as a modifier, never as a stereotype the visitor can feel. When `applicant = other`, this is the insured's gender, not the buyer's; use it for illness relevance and for how to refer to the insured (คุณแม่ / คุณพ่อ, ลูกสาว / ลูกชาย), not for the buyer's tone.
+Use as a modifier, never as a stereotype the visitor can feel. When `applicant = other`, this is the insured's gender, not the buyer's; use it for illness/medical relevance and respectful pronouns, NEVER to prematurely assume their family role (do NOT assume female = คุณแม่ or male = คุณพ่อ; use neutral terms like "คนที่คุณห่วงใย", "คนสำคัญของคุณ" until they answer `buy_for_who`).
 
 | Gender | Tendencies that are safe to lean on | Avoid |
 |---|---|---|
