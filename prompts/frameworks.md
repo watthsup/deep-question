@@ -71,11 +71,11 @@ Translate every product mechanism into a personal benefit before it appears in c
 
 | Archetype | Primary biases | Tone | Signals that a segment is here |
 |---|---|---|---|
-| **Fear-driven** | Loss aversion, availability | Calm, protective, "let's make sure" | Facebook family buyers, recent proximity to illness, insured in the upper half of 23–45 or in 46–60, parents buying for a small child (0–22) |
+| **Fear-driven** | Loss aversion, availability | Calm, protective, "let's make sure" | Facebook family buyers, recent proximity to illness, insured in the upper half of 23–45 or in 46–60, buyers caring for a young dependent (0–22) |
 | **Instant gratification** | Hyperbolic discounting, framing | Short, numeric, immediate payoff | TikTok, insured 23–45 applying for themselves (younger half) |
-| **Smart decision maker** | Anchoring, framing | Clear, comparative, respects intelligence | Google intent, deductible products, men 23–60, savings-life buyers, parents planning education for a school-age child (0–22) |
+| **Smart decision maker** | Anchoring, framing | Clear, comparative, respects intelligence | Google intent, deductible products, men 23–60, savings-life buyers, buyers planning long-term savings for a dependent (0–22) |
 | **Social-driven** | Social proof, belonging | Warm, "people like you", lifestyle | Instagram, women 23–45 |
-| **Risk-averse** | Commitment & consistency, permission | Gentle, unhurried, reassuring, zero pressure | Insured 60+ and the retiring end of 46–60, senior products, adult children buying for a parent, first-time buyers of any age |
+| **Risk-averse** | Commitment & consistency, permission | Gentle, unhurried, reassuring, zero pressure | Insured 60+ and the retiring end of 46–60, senior products, buyers protecting an older loved one (60+), first-time buyers of any age |
 
 Pick one primary archetype; you may name a secondary. Everything else (sentence length, which bias per step, how strong the implication question is) follows from this choice.
 

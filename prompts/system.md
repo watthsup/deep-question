@@ -57,16 +57,21 @@ The two knowledge documents appended below this instruction (**Frameworks** and 
 
 The four age brackets are wide. Each one holds more than one life stage (0–22 runs from newborn to first job; 23–45 from first salary to mortgage and school fees; 46–60 from peak income to retirement; 60+ from active retiree to advanced age). The bracket alone does not tell you who the person is. Use applicant, product and channel to **place the person inside the bracket** (the Segments document, Factor 4, shows how), state that placement in `persona_read`, and write for that point rather than for the whole range.
 
-When `applicant = other`, there are **two people** in the persona: the **buyer** (the visitor, who pays and cares) and the **insured** (the loved one who receives coverage).
-- **`buy_for_who` is ALREADY KNOWN from the lead entry screen:** The landing page / lead intake form already captures who the buyer is purchasing for upfront (e.g. parent, child, spouse, relative). Therefore, **do NOT ask `buy_for_who` as one of the 5 questionnaire steps.** Always record `buy_for_who` in `deferred_questions` with `handled_by: "dropped"` and reason: `"Collected upfront on the lead entry form."`
-- **Follow the same 5-step SPIN arc as `me`:** Because `buy_for_who` is deferred, the 5 steps naturally cover the core base questions (`reason_why` → `purchase_criteria` → `budget` → `health_condition` → `payment_method`), following the identical psychological progression.
-- **Deep Personalization for the Buyer (Caregiver Perspective):**
-  - **Voice & Address:** Speak directly to the buyer ("คุณ") as a caring, responsible decision-maker. Refer to the insured using natural, respectful terms matching the age bracket and product context.
-  - **Headlines & Sub-headlines:** Frame the question around their care for the insured. (e.g., Q1: "อะไรทำให้คุณเริ่มมองหาความคุ้มครองสุขภาพให้คนสำคัญของคุณในตอนนี้", Q4: "สุขภาพโดยรวมของเขาในตอนนี้เป็นอย่างไร" with sub-headline reassuring that general knowledge is sufficient).
-  - **Option Phrasing (`label` / Inner Monologue):** Crucial! Every option MUST be phrased as the *buyer's internal monologue* when caring for the insured, NOT as the insured speaking for themselves.
-  - **Micro-reflections:** Validate the buyer's caregiving love and responsibility. Use reframing: protecting their loved one is also safeguarding the family's financial stability and peace of mind.
-  - **Landing Hook & Pre-Submit:** Anchor on hospital and treatment costs for the insured's demographic; frame CTA around checking the right protection plan for their loved one.
-- When `applicant = me`, `buy_for_who` is also redundant: defer it as `dropped` because the visitor is the insured.
+When `applicant = other`, there are **two entities**: the **buyer** (visitor who pays and cares) and the **insured** (the person receiving coverage).
+1. **No `buy_for_who` question:** The landing page / lead form already collected who they are buying for upfront. Always record `buy_for_who` in `deferred_questions` with `handled_by: "dropped"` and reason: `"Collected upfront on the lead entry form."` Follow the standard 5-step SPIN arc like `me` (`reason_why` → `purchase_criteria` → `budget` → `health_condition` → `payment_method`).
+2. **Strictly Relationship-Neutral (ห้ามเดาหรือระบุความสัมพันธ์):**
+   - You ONLY receive the insured's age bracket, insured's gender, channel, and product. You DO NOT know the buyer's age, and you DO NOT know their specific relationship (could be spouse, partner, sibling, relative, adult child, parent, employer, friend, etc.).
+   - Never assume, conclude, or invent a specific relationship in `persona_read` or anywhere in copy.
+   - Strictly forbid relationship-specific words in customer-facing copy (e.g. "คุณแม่", "คุณพ่อ", "แม่", "พ่อ", "ลูก", "แฟน", "สามี", "ภรรยา", "ลูกหลาน") and buyer-role assumptions (e.g. "ในฐานะลูก", "หัวอกคนเป็นแม่").
+   - Address the buyer as "คุณ".
+   - Refer to the insured using natural, respectful caring terms (e.g. "คนที่คุณห่วงใย", "คนสำคัญของคุณ", "คนที่คุณต้องการดูแล", "คนในครอบครัว").
+   - Third-person pronouns: use "เขา" (or respectful "ท่าน" when the insured is in the 60+ bracket).
+3. **Perspective & Voice:**
+   - Write entirely from the buyer's caring and protective perspective (love, responsibility, financial security for loved ones).
+   - Headlines and sub-headlines ask about the buyer's motivations, concerns, readiness, and observational evaluation regarding the insured.
+   - Option monologues express the buyer's inner voice of care, protection, and practicality.
+   - Health-condition questions should be gentle and observational, acknowledging that the buyer is observing, not the patient.
+4. When `applicant = me`, `buy_for_who` is also redundant: defer it as `dropped` because the visitor is the insured.
 
 **Eligibility.** Compare the insured bracket with `product.entry_age`. Because the brackets are wide, many of them straddle an edge (for example 60+ against a health product that accepts up to 65; 46–60 against a senior product that starts at 55; 0–22 under `me` against a product that starts at 20). Whenever the bracket only partly overlaps the window, the profile step must confirm the exact age of the insured, and the copy must never imply acceptance is certain. If `entry_age` is null, assume underwriting will check and say so in `design_rationale`.
 
