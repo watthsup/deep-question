@@ -57,11 +57,16 @@ The two knowledge documents appended below this instruction (**Frameworks** and 
 
 The four age brackets are wide. Each one holds more than one life stage (0–22 runs from newborn to first job; 23–45 from first salary to mortgage and school fees; 46–60 from peak income to retirement; 60+ from active retiree to advanced age). The bracket alone does not tell you who the person is. Use applicant, product and channel to **place the person inside the bracket** (the Segments document, Factor 4, shows how), state that placement in `persona_read`, and write for that point rather than for the whole range.
 
-When `applicant = other`, there are **two people** in the persona: the buyer (the visitor) and the insured (someone they care about).
-- **NEVER PREMATURELY PIGEONHOLE THE RELATIONSHIP:** Do NOT assume upfront who the insured is (e.g. NEVER assume female 46–60 is automatically "คุณแม่", or 23–45 is automatically a spouse/child). The possibilities are broad: it could be a spouse, a sibling, an elderly parent, or another relative.
-- **Keep Early Copy Inclusive & General:** Refer to the insured with natural, caring, and respectful terms
-- **Ask `buy_for_who` Early:** For `applicant = other`, the `buy_for_who` base question is high-priority and MUST BE INCLUDED early in the journey (typically Step 1 Situation/Hook or Step 2 Problem/Pain) so the visitor naturally selects who the insured is (พ่อ, แม่, คู่สมรส/แฟน, ลูก, พี่น้อง, ญาติ). Only after the user selects their answer does the relationship become known for the TSR brief.
-- When `applicant = me`, `buy_for_who` is redundant: defer it as `dropped` with that reason.
+When `applicant = other`, there are **two people** in the persona: the **buyer** (the visitor, who pays and cares) and the **insured** (the loved one who receives coverage).
+- **`buy_for_who` is ALREADY KNOWN from the lead entry screen:** The landing page / lead intake form already captures who the buyer is purchasing for upfront (e.g. parent, child, spouse, relative). Therefore, **do NOT ask `buy_for_who` as one of the 5 questionnaire steps.** Always record `buy_for_who` in `deferred_questions` with `handled_by: "dropped"` and reason: `"Collected upfront on the lead entry form."`
+- **Follow the same 5-step SPIN arc as `me`:** Because `buy_for_who` is deferred, the 5 steps naturally cover the core base questions (`reason_why` → `purchase_criteria` → `budget` → `health_condition` → `payment_method`), following the identical psychological progression.
+- **Deep Personalization for the Buyer (Caregiver Perspective):**
+  - **Voice & Address:** Speak directly to the buyer ("คุณ") as a caring, responsible decision-maker. Refer to the insured using natural, respectful terms matching the age bracket and product context.
+  - **Headlines & Sub-headlines:** Frame the question around their care for the insured. (e.g., Q1: "อะไรทำให้คุณเริ่มมองหาความคุ้มครองสุขภาพให้คนสำคัญของคุณในตอนนี้", Q4: "สุขภาพโดยรวมของเขาในตอนนี้เป็นอย่างไร" with sub-headline reassuring that general knowledge is sufficient).
+  - **Option Phrasing (`label` / Inner Monologue):** Crucial! Every option MUST be phrased as the *buyer's internal monologue* when caring for the insured, NOT as the insured speaking for themselves.
+  - **Micro-reflections:** Validate the buyer's caregiving love and responsibility. Use reframing: protecting their loved one is also safeguarding the family's financial stability and peace of mind.
+  - **Landing Hook & Pre-Submit:** Anchor on hospital and treatment costs for the insured's demographic; frame CTA around checking the right protection plan for their loved one.
+- When `applicant = me`, `buy_for_who` is also redundant: defer it as `dropped` because the visitor is the insured.
 
 **Eligibility.** Compare the insured bracket with `product.entry_age`. Because the brackets are wide, many of them straddle an edge (for example 60+ against a health product that accepts up to 65; 46–60 against a senior product that starts at 55; 0–22 under `me` against a product that starts at 20). Whenever the bracket only partly overlaps the window, the profile step must confirm the exact age of the insured, and the copy must never imply acceptance is certain. If `entry_age` is null, assume underwriting will check and say so in `design_rationale`.
 
